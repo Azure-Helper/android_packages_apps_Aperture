@@ -28,7 +28,7 @@ import kotlin.reflect.safeCast
 class Camera(cameraInfo: CameraInfo, cameraManager: CameraManager) {
     val cameraSelector = cameraInfo.cameraSelector
 
-    val camera2CameraInfo = Camera2CameraInfo.from(cameraInfo)
+    private val camera2CameraInfo = Camera2CameraInfo.from(cameraInfo)
     val cameraId = camera2CameraInfo.cameraId
 
     val cameraFacing = when (cameraInfo.lensFacing) {
@@ -49,7 +49,7 @@ class Camera(cameraInfo: CameraInfo, cameraManager: CameraManager) {
      * This list may be empty if information parsing failed (this can happen with
      * external cameras).
      */
-    val sensors = mutableListOf<Sensor>().apply {
+    private val sensors = mutableListOf<Sensor>().apply {
         val physicalCameraIds = camera2CameraInfo.physicalCameraIds
 
         if (physicalCameraIds.isNotEmpty()) {

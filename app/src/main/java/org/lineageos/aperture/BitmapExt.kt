@@ -8,6 +8,8 @@ package org.lineageos.aperture
 import android.graphics.Bitmap
 import androidx.core.graphics.scale
 import org.lineageos.aperture.utils.ExifUtils.Transform
+import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.min
 
 /**
@@ -68,8 +70,7 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
     var p: Int
     var yp: Int
     var yi: Int
-    var yw: Int
-    val vmin = IntArray(Math.max(width, height))
+    val vmin = IntArray(max(width, height))
 
     var divsum = div + 1 shr 1
     divsum *= divsum
@@ -82,7 +83,7 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
         }
     }
 
-    yw = 0.also { yi = it }
+    var yw: Int = 0.also { yi = it }
 
     val stack = Array(div) {
         IntArray(
@@ -115,12 +116,12 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
             rinsum = ginsum
             i = -radius
             while (i <= radius) {
-                p = pix[yi + Math.min(wm, Math.max(i, 0))]
+                p = pix[yi + min(wm, max(i, 0))]
                 sir = stack[i + radius]
                 sir[0] = p and 0xff0000 shr 16
                 sir[1] = p and 0x00ff00 shr 8
                 sir[2] = p and 0x0000ff
-                rbs = r1 - Math.abs(i)
+                rbs = r1 - abs(i)
                 rsum += sir[0] * rbs
                 gsum += sir[1] * rbs
                 bsum += sir[2] * rbs
@@ -150,7 +151,7 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
                 goutsum -= sir[1]
                 boutsum -= sir[2]
                 if (y == 0) {
-                    vmin[x] = Math.min(x + radius + 1, wm)
+                    vmin[x] = min(x + radius + 1, wm)
                 }
                 p = pix[yw + vmin[x]]
                 sir[0] = p and 0xff0000 shr 16
@@ -192,12 +193,12 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
             yp = -radius * width
             i = -radius
             while (i <= radius) {
-                yi = Math.max(0, yp) + x
+                yi = max(0, yp) + x
                 sir = stack[i + radius]
                 sir[0] = r[yi]
                 sir[1] = g[yi]
                 sir[2] = b[yi]
-                rbs = r1 - Math.abs(i)
+                rbs = r1 - abs(i)
                 rsum += r[yi] * rbs
                 gsum += g[yi] * rbs
                 bsum += b[yi] * rbs
@@ -231,7 +232,7 @@ internal fun Bitmap.stackBlur(radius: Int): Bitmap {
                 goutsum -= sir[1]
                 boutsum -= sir[2]
                 if (x == 0) {
-                    vmin[y] = Math.min(y + r1, hm) * width
+                    vmin[y] = min(y + r1, hm) * width
                 }
                 p = x + vmin[y]
                 sir[0] = r[p]

@@ -13,7 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.camera.core.ImageCapture
 import androidx.camera.video.MediaStoreOutputOptions
-import java.io.ByteArrayOutputStream
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -38,14 +37,13 @@ object StorageUtils {
             }
         }
 
-        val outputFileOptions = if (outputStream != null) {
-            ImageCapture.OutputFileOptions.Builder(outputStream)
-        } else {
-            ImageCapture.OutputFileOptions.Builder(
-                contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-        }
+        val outputFileOptions = outputStream?.let {
+            ImageCapture.OutputFileOptions.Builder(it)
+        } ?: ImageCapture.OutputFileOptions.Builder(
+            contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+
         return outputFileOptions
             .setMetadata(metadata)
             .build()

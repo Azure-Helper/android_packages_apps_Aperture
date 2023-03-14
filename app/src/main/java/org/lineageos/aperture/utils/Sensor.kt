@@ -50,15 +50,6 @@ interface Sensor {
     val size: SizeF
 
     /**
-     * Gets the angle of view of a camera.
-     */
-    val viewAngleDegrees: Int
-        get() = focalLengthToViewAngleDegrees(
-            availableFocalLengths.first(),
-            horizontalLength
-        )
-
-    /**
      * Gets the length of the horizontal side of the sensor.
      *
      * The horizontal side is the width of the sensor size after rotated by the sensor

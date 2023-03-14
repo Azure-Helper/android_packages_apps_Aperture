@@ -1904,6 +1904,7 @@ open class CameraActivity : AppCompatActivity() {
         flipCameraButton.smoothRotate(compensationValue)
     }
 
+    @Suppress("EmptyMethod")
     fun preventClicks(@Suppress("UNUSED_PARAMETER") view: View) {}
 
     companion object {
